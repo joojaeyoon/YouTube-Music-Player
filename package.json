@@ -1,0 +1,39 @@
+{
+  "name": "YoutubeMusicPlayer",
+  "version": "1.0.0",
+  "description": "Youtube-music player for PC",
+  "main": "index.js",
+  "license": "MIT",
+  "build": {
+    "appId": "com.YoutubeMusic",
+    "asar": false,
+    "productName": "YouTubeMusicPlayer",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "./assets/youtube-music-256.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --watch . --exec \"electron . --debug\"",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^7.1.9",
+    "electron-builder": "^22.2.0",
+    "nodemon": "^2.0.2"
+  }
+}
