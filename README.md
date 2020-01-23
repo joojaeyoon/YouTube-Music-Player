@@ -20,3 +20,8 @@
 ```
 
 <img src='assets/player.jpg' align="center"/>
+
+### ToDo
+
+- [ ] Tray icon
+- [ ] Background music play
