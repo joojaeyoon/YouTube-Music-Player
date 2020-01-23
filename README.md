@@ -4,7 +4,7 @@
 
 <h1 align="center">YouTube Music Player for PC</h1>
 
-### ToUse
+### To Use
 
 - start
 
