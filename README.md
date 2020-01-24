@@ -9,6 +9,8 @@
 - start
 
 ```
+~# git clone https://github.com/wow1548/YouTube-Music-Player.git
+~# cd YouTube-Music-Player
 ~# yarn
 ~# yarn start
 ```
@@ -23,5 +25,6 @@
 
 ### ToDo
 
-- [ ] Tray icon
-- [ ] Background music play
+- [x] Tray icon
+- [x] Background music play
+- [ ] mini player

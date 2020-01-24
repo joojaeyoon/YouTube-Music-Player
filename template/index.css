@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 #Title {
@@ -25,10 +26,8 @@ body {
   outline: none;
   cursor: pointer;
   overflow: hidden;
-  margin-top: 5px;
-  margin-right: 10px;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   -webkit-app-region: no-drag;
 }
 
@@ -44,4 +43,29 @@ body {
   width: 10px;
   height: 10px;
   color: black;
+}
+
+.load {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  min-height: 100vh;
+  background-color: #444;
+}
+
+.loadimg {
+  width: 150px;
+  height: 150px;
+  -webkit-animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

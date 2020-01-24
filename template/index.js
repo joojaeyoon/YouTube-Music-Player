@@ -9,8 +9,8 @@ let images = [
 let img = document.getElementById("toggle");
 
 function Minimize() {
-  console.log("minimize");
   currentWindow.minimize();
+  console.log(remote);
 }
 
 function ToggleMaximize() {
@@ -26,7 +26,7 @@ function ToggleMaximize() {
 }
 
 function Close() {
-  currentWindow.close();
+  currentWindow.hide();
 }
 
 ipc.on("isMaximized", function(_, value) {
