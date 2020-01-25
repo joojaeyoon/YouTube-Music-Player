@@ -3,14 +3,15 @@ const { remote, ipcRenderer: ipc } = require("electron");
 const currentWindow = remote.getCurrentWindow();
 
 let images = [
-  "../assets/controls/maximize.png",
-  "../assets/controls/unmaximize.png"
+  "../../assets/controls/maximize.png",
+  "../../assets/controls/unmaximize.png"
 ];
 let img = document.getElementById("toggle");
+const title = document.querySelector("Title");
+const titlebar = document.getElementById("Title");
 
 function Minimize() {
   currentWindow.minimize();
-  console.log(remote);
 }
 
 function ToggleMaximize() {
@@ -28,6 +29,11 @@ function ToggleMaximize() {
 function Close() {
   currentWindow.hide();
 }
+
+ipc.on("titleChanged", function(_, value) {
+  title.textContent = value;
+  titlebar.textContent = value;
+});
 
 ipc.on("isMaximized", function(_, value) {
   if (value) {

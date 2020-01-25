@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="index.css" />
+    <title>YouTube Music</title>
+  </head>
+  <body>
+    <div id="Titlebar">
+      <img id="logo" src="../../assets/favicon.ico" />
+      <div id="Title">YouTube Music</div>
+      <div>
+        <button class="button min">
+          <img class="control" src="../../assets/controls/minimize.png" />
+        </button>
+        <button class="button toggle">
+          <img
+            class="control max"
+            id="toggle"
+            src="../../assets/controls/maximize.png"
+          />
+        </button>
+        <button class="button close">
+          <img class="control" src="../../assets/controls/close.png" />
+        </button>
+      </div>
+    </div>
+    <div class="load">
+      <img class="loadimg" src="../../assets/favicon.png" />
+    </div>
+    <script src="index.js"></script>
+    <script>
+      document.getElementsByClassName("min")[0].onclick = Minimize;
+      document.getElementsByClassName("toggle")[0].onclick = ToggleMaximize;
+      document.getElementsByClassName("close")[0].onclick = Close;
+    </script>
+  </body>
+</html>
