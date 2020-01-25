@@ -1,12 +1,6 @@
-const {
-  app,
-  BrowserWindow,
-  Tray,
-  BrowserView,
-  ipcMain,
-  screen
-} = require("electron");
+const { app, BrowserWindow, Tray, BrowserView, ipcMain } = require("electron");
 const { contextMenu } = require("./Components/TrayMenu");
+const { GetInfo } = require("./Components/GetInfo");
 const path = require("path");
 const fs = require("fs");
 
@@ -24,6 +18,8 @@ if (fs.existsSync("config.json")) {
 }
 
 let mainWindow, view, miniPlayer;
+let tray = null;
+let currentSong = "";
 
 const url = "https://music.youtube.com";
 const titleBarHeight = 30;
@@ -52,21 +48,21 @@ function createWindow() {
   });
 
   // # MiniPlayer Settings
-  // miniPlayer = new BrowserWindow({
-  //   frame: false,
-  //   center: false,
-  //   resizable: false,
-  //   alwaysOnTop: false,
-  //   width: 300,
-  //   height: 200,
-  //   webPreferences: {
-  //     nodeIntegration: true
-  //   },
-  //   skipTaskbar: true,
-  //   autoHideMenuBar: true
-  // });
+  miniPlayer = new BrowserWindow({
+    frame: false,
+    center: false,
+    resizable: false,
+    alwaysOnTop: true,
+    width: 300,
+    height: 200,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    skipTaskbar: true,
+    autoHideMenuBar: true
+  });
 
-  // miniPlayer.loadFile("./template/mini/index.html");
+  miniPlayer.loadFile("./template/mini/index.html");
   mainWindow.loadFile("./template/main/index.html");
   mainWindow.setBrowserView(view);
   view.webContents.loadURL(url);
@@ -107,45 +103,49 @@ function createWindow() {
     mainWindow.close();
   });
 
-  view.webContents.on("login", function() {
-    console.log("Play!!");
-  });
-
-  view.webContents.on("dom-ready", () => {
+  view.webContents.on("dom-ready", function() {
     view.webContents.executeJavaScript(`    
       const {ipcRenderer}=require('electron');
       let sendTitle;
+      const info={};
     `);
   });
 
   view.webContents.on("media-started-playing", function() {
-    view.webContents.executeJavaScript(
-      `
+    view.webContents.executeJavaScript(`
         sendTitle=setInterval(()=>{
           ipcRenderer.send("Title",document.querySelector("#layout > ytmusic-player-bar \
           > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar \
           > yt-formatted-string").textContent+" - YouTube Music");
         },1000);
-    `
-    );
+    `);
   });
 
   view.webContents.on("media-paused", function() {
     view.webContents.executeJavaScript(`
-    clearInterval(sendTitle);
+      clearInterval(sendTitle);
+      ipcRenderer.send("Title","YouTube Music");
     `);
   });
 
-  mainWindow.webContents.openDevTools({ mode: "detach" });
-  view.webContents.openDevTools({ mode: "detach" });
-
-  ipcMain.on("Title", (_, value) => {
-    mainWindow.send("titleChanged", value);
+  ipcMain.on("Title", function(_, title) {
+    if (currentSong !== title) {
+      GetInfo(view.webContents);
+      currentSong = title;
+      mainWindow.send("titleChanged", title);
+    }
   });
+
+  ipcMain.on("info", function(_, info) {
+    miniPlayer.send("mini", info);
+  });
+
+  // mainWindow.webContents.openDevTools({ mode: "detach" });
+  // miniPlayer.webContents.openDevTools({ mode: "detach" });
+  view.webContents.openDevTools({ mode: "detach" });
 }
 
-let tray = null;
-app.on("ready", () => {
+app.on("ready", function() {
   tray = new Tray(iconPath);
 
   tray.setToolTip("YouTube Music Player");
