@@ -1,21 +1,13 @@
 const { app, BrowserWindow, Tray, BrowserView, ipcMain } = require("electron");
-const { contextMenu } = require("./Components/TrayMenu");
-const { GetInfo } = require("./Components/GetInfo");
-const path = require("path");
+const { contextMenu } = require("./src/Components/TrayMenu");
+const { GetInfo } = require("./src/Components/GetInfo");
+const {
+  mainWindowConfig,
+  miniPlayerConfig,
+  viewConfig,
+  iconPath
+} = require("./src/Init");
 const fs = require("fs");
-
-let conf = {
-  x: 0,
-  y: 0,
-  width: 1280,
-  height: 720
-};
-
-if (fs.existsSync("config.json")) {
-  conf = JSON.parse(fs.readFileSync("config.json"));
-} else {
-  fs.writeFileSync("config.json", JSON.stringify(conf), "utf-8");
-}
 
 let mainWindow, view, miniPlayer;
 let tray = null;
@@ -24,43 +16,10 @@ let currentSong = "";
 const url = "https://music.youtube.com";
 const titleBarHeight = 30;
 
-let iconPath = path.join(__dirname, "assets/favicon.ico");
-
-const mainWindowConfig = {
-  webPreferences: {
-    nodeIntegration: true
-  },
-  width: conf.width,
-  height: conf.height,
-  x: conf.x,
-  y: conf.y,
-  icon: iconPath,
-  frame: false,
-  titleBarStyle: ""
-};
-
 function createWindow() {
   mainWindow = new BrowserWindow(mainWindowConfig);
-  view = new BrowserView({
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  // # MiniPlayer Settings
-  miniPlayer = new BrowserWindow({
-    frame: false,
-    center: false,
-    resizable: false,
-    alwaysOnTop: true,
-    width: 300,
-    height: 200,
-    webPreferences: {
-      nodeIntegration: true
-    },
-    skipTaskbar: true,
-    autoHideMenuBar: true
-  });
+  miniPlayer = new BrowserWindow(miniPlayerConfig);
+  view = new BrowserView(viewConfig);
 
   miniPlayer.loadFile("./template/mini/index.html");
   mainWindow.loadFile("./template/main/index.html");
@@ -69,22 +28,29 @@ function createWindow() {
   view.setBounds({
     x: 0,
     y: 0 + titleBarHeight,
-    width: conf.width,
-    height: conf.height - titleBarHeight
+    width: mainWindowConfig.width,
+    height: mainWindowConfig.height - titleBarHeight
   });
 
   mainWindow.on("closed", function() {
     mainWindow = null;
+    miniPlayer = null;
   });
 
   mainWindow.on("close", function() {
     // Save configuration.
-    const pos = mainWindow.getPosition();
-    const size = mainWindow.getSize();
-    conf.x = pos[0];
-    conf.y = pos[1];
-    conf.width = size[0];
-    conf.height = size[1];
+    const conf = { main: {}, mini: {} };
+    const names = ["main", "mini"];
+    const windows = [mainWindow, miniPlayer];
+
+    for (var i = 0; i < names.length; i++) {
+      const pos = windows[i].getPosition();
+      const size = windows[i].getSize();
+      conf[names[i]].x = pos[0];
+      conf[names[i]].y = pos[1];
+      conf[names[i]].width = size[0];
+      conf[names[i]].height = size[1];
+    }
     fs.writeFileSync("config.json", JSON.stringify(conf), "utf-8");
   });
 
@@ -99,15 +65,16 @@ function createWindow() {
     mainWindow.send("isMaximized", mainWindow.isMaximized());
   });
 
-  ipcMain.on("quit", function() {
-    mainWindow.close();
-  });
-
   view.webContents.on("dom-ready", function() {
     view.webContents.executeJavaScript(`    
       const {ipcRenderer}=require('electron');
       let sendTitle;
       const info={};
+      
+      const previousButton=document.querySelector("#left-controls > div > paper-icon-button.previous-button.style-scope.ytmusic-player-bar");
+      const playButton=document.querySelector("#play-pause-button")
+      const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar")
+      
     `);
   });
 
@@ -136,13 +103,41 @@ function createWindow() {
     }
   });
 
+  ipcMain.on("quit", function() {
+    mainWindow.close();
+  });
+
   ipcMain.on("info", function(_, info) {
     miniPlayer.send("mini", info);
   });
 
+  ipcMain.on("next", function() {
+    view.webContents.executeJavaScript(`
+    nextButton.click();
+    `);
+  });
+
+  ipcMain.on("previous", function() {
+    view.webContents.executeJavaScript(`
+    previousButton.click();
+    `);
+  });
+
+  ipcMain.on("pause", function() {
+    view.webContents.executeJavaScript(`
+    playButton.click();
+    `);
+  });
+
+  ipcMain.on("play", function() {
+    view.webContents.executeJavaScript(`
+    playButton.click();
+    `);
+  });
+
   // mainWindow.webContents.openDevTools({ mode: "detach" });
   // miniPlayer.webContents.openDevTools({ mode: "detach" });
-  view.webContents.openDevTools({ mode: "detach" });
+  // view.webContents.openDevTools({ mode: "detach" });
 }
 
 app.on("ready", function() {

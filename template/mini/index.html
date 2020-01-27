@@ -5,17 +5,50 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
+    <div class="MenuDiv">
+      <button class="MenuControl pin">
+        <img class="MenuImg" src="../../assets/controls/pin.png" />
+      </button>
+      <button class="MenuControl min">
+        <img class="MenuImg" src="../../assets/controls/minimize.png" />
+      </button>
+      <button class="MenuControl close">
+        <img class="MenuImg" src="../../assets/controls/close.png" />
+      </button>
+    </div>
     <div class="row">
       <img id="img" src="../../assets/favicon.ico" />
       <div id="info">
-        <div id="song">
+        <p id="song">
           Song
-        </div>
-        <div id="author">
+        </p>
+        <p id="author">
           Author
-        </div>
+        </p>
       </div>
     </div>
+    <div class="ControlDiv">
+      <button class="controls previous">
+        <img class="ControlImg" src="../../assets/controls/skip_previous.png" />
+      </button>
+      <button class="controls playControl">
+        <img class="ControlImg pause" src="../../assets/controls/pause.png" />
+      </button>
+      <button class="controls next">
+        <img class="ControlImg" src="../../assets/controls/skip_next.png" />
+      </button>
+    </div>
     <script src="index.js"></script>
+    <script>
+      document.getElementsByClassName("pin")[0].onclick = pinButton;
+      document.getElementsByClassName("min")[0].onclick = minButton;
+      document.getElementsByClassName("close")[0].onclick = closeButton;
+
+      document.getElementsByClassName(
+        "playControl"
+      )[0].onclick = playButtonClicked;
+      document.getElementsByClassName("next")[0].onclick = nextButton;
+      document.getElementsByClassName("previous")[0].onclick = previousButton;
+    </script>
   </body>
 </html>
