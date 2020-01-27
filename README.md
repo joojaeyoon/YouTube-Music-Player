@@ -24,7 +24,9 @@
 ### YouTube Music Player
 
 <img title="YouTube Music Player" src='assets/player.jpg'/>
+
 ### Miniplayer
+
 <img title="MiniPlayer" src='assets/miniplayer.jpg'>
 ### ToDo
 
@@ -32,3 +34,4 @@
 - [x] Background music play
 - [x] mini player
 - [x] add thumb up, down on miniplayer
+- [ ] add playing time
