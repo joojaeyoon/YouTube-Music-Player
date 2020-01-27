@@ -27,11 +27,12 @@ body {
   width: 20px;
   height: 20px;
 }
-.row {
+.InfoDiv {
   display: flex;
   flex-direction: row;
   margin-top: 15px;
   height: 100px;
+  overflow: hidden;
 }
 
 #img {

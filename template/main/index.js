@@ -30,6 +30,10 @@ function Close() {
   currentWindow.hide();
 }
 
+function miniMode() {
+  ipc.send("minimode");
+}
+
 ipc.on("titleChanged", function(_, value) {
   title.textContent = value;
   titlebar.textContent = value;

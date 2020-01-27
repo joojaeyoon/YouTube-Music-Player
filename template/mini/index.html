@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="index.css" />
+    <title>YouTube Music</title>
   </head>
   <body>
     <div class="MenuDiv">
@@ -10,13 +11,16 @@
         <img class="MenuImg" src="../../assets/controls/pin.png" />
       </button>
       <button class="MenuControl min">
-        <img class="MenuImg" src="../../assets/controls/minimize.png" />
+        <img class="MenuImg" src="../../assets/controls/mini_minimize.png" />
+      </button>
+      <button class="MenuControl max">
+        <img class="MenuImg" src="../../assets/controls/mini_maximize.png" />
       </button>
       <button class="MenuControl close">
-        <img class="MenuImg" src="../../assets/controls/close.png" />
+        <img class="MenuImg" src="../../assets/controls/mini_close.png" />
       </button>
     </div>
-    <div class="row">
+    <div class="InfoDiv">
       <img id="img" src="../../assets/favicon.ico" />
       <div id="info">
         <p id="song">
@@ -32,7 +36,10 @@
         <img class="ControlImg" src="../../assets/controls/skip_previous.png" />
       </button>
       <button class="controls playControl">
-        <img class="ControlImg pause" src="../../assets/controls/pause.png" />
+        <img
+          class="ControlImg play start"
+          src="../../assets/controls/start.png"
+        />
       </button>
       <button class="controls next">
         <img class="ControlImg" src="../../assets/controls/skip_next.png" />
@@ -43,6 +50,7 @@
       document.getElementsByClassName("pin")[0].onclick = pinButton;
       document.getElementsByClassName("min")[0].onclick = minButton;
       document.getElementsByClassName("close")[0].onclick = closeButton;
+      document.getElementsByClassName("max")[0].onclick = maxButton;
 
       document.getElementsByClassName(
         "playControl"

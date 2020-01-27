@@ -13,6 +13,9 @@
         <button class="button min">
           <img class="control" src="../../assets/controls/minimize.png" />
         </button>
+        <button class="button mini">
+          <img class="control" src="../../assets/controls/mini.png" />
+        </button>
         <button class="button toggle">
           <img
             class="control max"
@@ -33,6 +36,7 @@
       document.getElementsByClassName("min")[0].onclick = Minimize;
       document.getElementsByClassName("toggle")[0].onclick = ToggleMaximize;
       document.getElementsByClassName("close")[0].onclick = Close;
+      document.getElementsByClassName("mini")[0].onclick = miniMode;
     </script>
   </body>
 </html>

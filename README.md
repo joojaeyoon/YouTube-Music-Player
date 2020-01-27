@@ -21,10 +21,14 @@
 ~# yarn dist
 ```
 
-<img src='assets/player.jpg' align="center"/>
+### YouTube Music Player
 
+<img title="YouTube Music Player" src='assets/player.jpg' align="center"/>
+### Miniplayer
+<img title="MiniPlayer" src='assets/miniplayer.jpg'>
 ### ToDo
 
 - [x] Tray icon
 - [x] Background music play
-- [ ] mini player
+- [x] mini player
+- [ ] add thumb up, down on miniplayer

@@ -22,6 +22,7 @@ function createWindow() {
   view = new BrowserView(viewConfig);
 
   miniPlayer.loadFile("./template/mini/index.html");
+  miniPlayer.hide();
   mainWindow.loadFile("./template/main/index.html");
   mainWindow.setBrowserView(view);
   view.webContents.loadURL(url);
@@ -71,6 +72,7 @@ function createWindow() {
       let sendTitle;
       const info={};
       
+      const song=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > yt-formatted-string")
       const previousButton=document.querySelector("#left-controls > div > paper-icon-button.previous-button.style-scope.ytmusic-player-bar");
       const playButton=document.querySelector("#play-pause-button")
       const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar")
@@ -81,11 +83,10 @@ function createWindow() {
   view.webContents.on("media-started-playing", function() {
     view.webContents.executeJavaScript(`
         sendTitle=setInterval(()=>{
-          ipcRenderer.send("Title",document.querySelector("#layout > ytmusic-player-bar \
-          > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar \
-          > yt-formatted-string").textContent+" - YouTube Music");
+          ipcRenderer.send("Title",song.textContent+" - YouTube Music");
         },1000);
     `);
+    miniPlayer.send("play", true);
   });
 
   view.webContents.on("media-paused", function() {
@@ -93,6 +94,7 @@ function createWindow() {
       clearInterval(sendTitle);
       ipcRenderer.send("Title","YouTube Music");
     `);
+    miniPlayer.send("play", false);
   });
 
   ipcMain.on("Title", function(_, title) {
@@ -103,12 +105,26 @@ function createWindow() {
     }
   });
 
+  ipcMain.on("minimode", function() {
+    mainWindow.hide();
+    miniPlayer.show();
+  });
+
   ipcMain.on("quit", function() {
     mainWindow.close();
   });
 
   ipcMain.on("info", function(_, info) {
-    miniPlayer.send("mini", info);
+    miniPlayer.send("info", info);
+  });
+
+  ipcMain.on("mini", function() {
+    miniPlayer.show();
+  });
+
+  ipcMain.on("max", function() {
+    mainWindow.show();
+    miniPlayer.hide();
   });
 
   ipcMain.on("next", function() {
@@ -120,12 +136,6 @@ function createWindow() {
   ipcMain.on("previous", function() {
     view.webContents.executeJavaScript(`
     previousButton.click();
-    `);
-  });
-
-  ipcMain.on("pause", function() {
-    view.webContents.executeJavaScript(`
-    playButton.click();
     `);
   });
 
