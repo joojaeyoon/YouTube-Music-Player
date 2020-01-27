@@ -72,10 +72,12 @@ function createWindow() {
       let sendTitle;
       const info={};
       
-      const song=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > yt-formatted-string")
+      const song=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > yt-formatted-string");
       const previousButton=document.querySelector("#left-controls > div > paper-icon-button.previous-button.style-scope.ytmusic-player-bar");
-      const playButton=document.querySelector("#play-pause-button")
-      const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar")
+      const playButton=document.querySelector("#play-pause-button");
+      const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar");
+      const thumbUp=document.querySelector("#like-button-renderer > paper-icon-button.like.style-scope.ytmusic-like-button-renderer");
+      const thumbDown=document.querySelector("#like-button-renderer > paper-icon-button.dislike.style-scope.ytmusic-like-button-renderer");
       
     `);
   });
@@ -98,8 +100,8 @@ function createWindow() {
   });
 
   ipcMain.on("Title", function(_, title) {
+    GetInfo(view.webContents);
     if (currentSong !== title) {
-      GetInfo(view.webContents);
       currentSong = title;
       mainWindow.send("titleChanged", title);
     }
@@ -129,24 +131,36 @@ function createWindow() {
 
   ipcMain.on("next", function() {
     view.webContents.executeJavaScript(`
-    nextButton.click();
+      nextButton.click();
     `);
   });
 
   ipcMain.on("previous", function() {
     view.webContents.executeJavaScript(`
-    previousButton.click();
+      previousButton.click();
     `);
   });
 
   ipcMain.on("play", function() {
     view.webContents.executeJavaScript(`
-    playButton.click();
+      playButton.click();
+    `);
+  });
+
+  ipcMain.on("thumbup", function() {
+    view.webContents.executeJavaScript(`
+      thumbUp.click();
+    `);
+  });
+
+  ipcMain.on("thumbdown", function() {
+    view.webContents.executeJavaScript(`
+      thumbDown.click();
     `);
   });
 
   // mainWindow.webContents.openDevTools({ mode: "detach" });
-  // miniPlayer.webContents.openDevTools({ mode: "detach" });
+  miniPlayer.webContents.openDevTools({ mode: "detach" });
   // view.webContents.openDevTools({ mode: "detach" });
 }
 

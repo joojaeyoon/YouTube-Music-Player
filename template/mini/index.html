@@ -32,6 +32,12 @@
       </div>
     </div>
     <div class="ControlDiv">
+      <button class="controls">
+        <img
+          class="ControlImg thumb down"
+          src="../../assets/controls/thumb_down_outline.png"
+        />
+      </button>
       <button class="controls previous">
         <img class="ControlImg" src="../../assets/controls/skip_previous.png" />
       </button>
@@ -43,6 +49,12 @@
       </button>
       <button class="controls next">
         <img class="ControlImg" src="../../assets/controls/skip_next.png" />
+      </button>
+      <button class="controls">
+        <img
+          class="ControlImg thumb up"
+          src="../../assets/controls/thumb_up_outline.png"
+        />
       </button>
     </div>
     <script src="index.js"></script>
@@ -57,6 +69,8 @@
       )[0].onclick = playButtonClicked;
       document.getElementsByClassName("next")[0].onclick = nextButton;
       document.getElementsByClassName("previous")[0].onclick = previousButton;
+      document.getElementsByClassName("up")[0].onclick = thumbUpButton;
+      document.getElementsByClassName("down")[0].onclick = thumbDownButton;
     </script>
   </body>
 </html>

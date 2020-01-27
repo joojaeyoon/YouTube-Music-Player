@@ -7,6 +7,9 @@ const img = document.getElementById("img");
 const song = document.getElementById("song");
 const author = document.getElementById("author");
 
+const thumbUp = document.getElementsByClassName("up")[0];
+const thumbDown = document.getElementsByClassName("down")[0];
+
 const playImg = document.getElementsByClassName("play")[0];
 
 function changePlayState(isPlay) {
@@ -38,11 +41,30 @@ function previousButton() {
   ipc.send("previous");
 }
 
+function thumbUpButton() {
+  if (thumbUp.classList.contains("check")) {
+    thumbUp.src = thumbUp.src.replace("filled", "outline");
+    thumbUp.classList.remove("check");
+  } else {
+    thumbUp.src = thumbUp.src.replace("outline", "filled");
+    thumbUp.classList.add("check");
+  }
+  ipc.send("thumbup");
+}
+
+function thumbDownButton() {
+  ipc.send("thumbdown");
+}
+
 function pinButton(event) {
   const state = currentWindow.isAlwaysOnTop();
-
-  if (state) event.target.style.backgroundColor = "transparent";
-  else event.target.style.backgroundColor = "gray";
+  if (state) {
+    event.target.style.backgroundColor = "transparent";
+    event.target.style.transform = "translateY(0px)";
+  } else {
+    event.target.style.backgroundColor = "gray";
+    event.target.style.transform = "translateY(3px)";
+  }
   currentWindow.setAlwaysOnTop(!state);
 }
 
@@ -63,6 +85,13 @@ ipc.on("info", function(_, info) {
   img.src = info.src;
   song.textContent = info.song;
   author.textContent = info.author;
+  if (info.like === "true") {
+    thumbUp.src = thumbUp.src.replace("outline", "filled");
+    thumbUp.classList.add("check");
+  } else {
+    thumbUp.src = thumbUp.src.replace("filled", "outline");
+    thumbUp.classList.remove("check");
+  }
 });
 
 ipc.on("play", function(_, isPlaying) {

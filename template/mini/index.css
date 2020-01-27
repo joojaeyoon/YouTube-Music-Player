@@ -45,29 +45,26 @@ body {
   margin: 0px 0px 0px 10px;
   color: white;
   font-size: 14px;
+  font-weight: bold;
 }
 
 #song {
   margin: 0px;
+  font-size: 18px;
 }
 
 #author {
   margin-top: 20px;
 }
 
-@keyframes textMove {
-  from {
-    margin-left: 50%;
-  }
-  to {
-    margin-left: -50%;
-  }
-}
-
 .ControlDiv {
   margin-top: 10px;
   text-align: center;
   -webkit-app-region: no-drag;
+}
+
+.ControlDiv > * {
+  margin: 0px 5px 0px 5px;
 }
 
 .controls {
@@ -78,13 +75,20 @@ body {
   padding: 0;
   vertical-align: top;
   outline: none;
+  border-radius: 50px;
 }
 .controls :hover {
   cursor: pointer;
 }
 
+.controls :hover {
+  opacity: 0.5;
+}
+
 .controls :active {
-  background-color: gray;
+  -ms-transform: translateY(1px);
+  -webkit-transform: translateY(1px);
+  transform: translateY(1px);
 }
 
 .ControlImg {
@@ -92,6 +96,10 @@ body {
   width: 28px;
 }
 
-.pause {
-  width: 32px;
+.play {
+  width: 36px;
+}
+
+.thumb {
+  width: 18px;
 }

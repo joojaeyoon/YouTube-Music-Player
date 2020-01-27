@@ -23,7 +23,7 @@
 
 ### YouTube Music Player
 
-<img title="YouTube Music Player" src='assets/player.jpg' align="center"/>
+<img title="YouTube Music Player" src='assets/player.jpg'/>
 ### Miniplayer
 <img title="MiniPlayer" src='assets/miniplayer.jpg'>
 ### ToDo
@@ -31,4 +31,4 @@
 - [x] Tray icon
 - [x] Background music play
 - [x] mini player
-- [ ] add thumb up, down on miniplayer
+- [x] add thumb up, down on miniplayer
