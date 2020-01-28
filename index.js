@@ -12,6 +12,7 @@ const fs = require("fs");
 let mainWindow, view, miniPlayer;
 let tray = null;
 let currentSong = "";
+let isPlaying = false;
 
 const url = "https://music.youtube.com";
 const titleBarHeight = 30;
@@ -34,8 +35,6 @@ function createWindow() {
   });
 
   mainWindow.on("closed", function() {
-    view = null;
-    miniPlayer = null;
     mainWindow = null;
   });
 
@@ -108,14 +107,19 @@ function createWindow() {
           ipcRenderer.send("Title",song.textContent+" - YouTube Music");
         },1000);
     `);
+    isPlaying = true;
     miniPlayer.send("play", true);
   });
 
   view.webContents.on("media-paused", function() {
+    if (view.isDestroyed()) {
+      return;
+    }
     view.webContents.executeJavaScript(`
       clearInterval(sendTitle);
       ipcRenderer.send("Title","YouTube Music");
     `);
+    isPlaying = false;
     miniPlayer.send("play", false);
   });
 
@@ -133,6 +137,7 @@ function createWindow() {
   });
 
   ipcMain.on("quit", function() {
+    view.destroy();
     app.quit();
   });
 
@@ -193,6 +198,7 @@ app.on("ready", function() {
   tray.on("click", function() {
     mainWindow.show();
   });
+
   createWindow();
 });
 
