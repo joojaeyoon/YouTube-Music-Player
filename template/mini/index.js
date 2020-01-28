@@ -6,6 +6,7 @@ const title = document.querySelector("head > title");
 const img = document.getElementById("img");
 const song = document.getElementById("song");
 const author = document.getElementById("author");
+const time = document.getElementById("time");
 
 const thumbUp = document.getElementsByClassName("up")[0];
 const thumbDown = document.getElementsByClassName("down")[0];
@@ -85,6 +86,7 @@ ipc.on("info", function(_, info) {
   img.src = info.src;
   song.textContent = info.song;
   author.textContent = info.author;
+  time.textContent = info.time;
   if (info.like === "true") {
     thumbUp.src = thumbUp.src.replace("outline", "filled");
     thumbUp.classList.add("check");

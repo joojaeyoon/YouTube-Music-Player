@@ -34,4 +34,5 @@
 - [x] Background music play
 - [x] mini player
 - [x] add thumb up, down on miniplayer
-- [ ] add playing time
+- [x] add playing time
+- [ ] add volume slider

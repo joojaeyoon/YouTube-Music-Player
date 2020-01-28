@@ -45,12 +45,14 @@ const mainWindowConfig = {
 const miniPlayerConfig = {
   frame: false,
   center: false,
-  resizable: false,
+  resizable: true,
   alwaysOnTop: false,
   width: miniConf.width,
   height: miniConf.height,
   x: miniConf.x,
   y: miniConf.y,
+  minWidth: 300,
+  minHeight: 200,
   webPreferences: {
     nodeIntegration: true
   },

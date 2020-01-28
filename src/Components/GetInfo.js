@@ -5,6 +5,7 @@ function GetInfo(webcontents) {
             info.song=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > yt-formatted-string").textContent;
             info.author=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > span > span.subtitle.style-scope.ytmusic-player-bar > yt-formatted-string").textContent;
             info.like=thumbUp.getAttribute("aria-pressed");
+            info.time=time.textContent;
             ipcRenderer.send("info",info);
         `
   );

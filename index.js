@@ -35,7 +35,6 @@ function createWindow() {
 
   mainWindow.on("closed", function() {
     mainWindow = null;
-    miniPlayer = null;
   });
 
   mainWindow.on("close", function() {
@@ -66,6 +65,24 @@ function createWindow() {
     mainWindow.send("isMaximized", mainWindow.isMaximized());
   });
 
+  miniPlayer.webContents.on("dom-ready", function() {
+    miniPlayer.webContents.executeJavaScript(`
+      let minSize=(Math.min(window.innerWidth,window.innerHeight)*0.6).toString()+"px";
+      
+      img.style.width=minSize;
+      img.style.height=minSize;
+    `);
+  });
+
+  miniPlayer.on("resize", function() {
+    miniPlayer.webContents.executeJavaScript(`
+      minSize=(Math.min(window.innerWidth,window.innerHeight)*0.6).toString()+"px";
+      
+      img.style.width=minSize;
+      img.style.height=minSize;
+    `);
+  });
+
   view.webContents.on("dom-ready", function() {
     view.webContents.executeJavaScript(`    
       const {ipcRenderer}=require('electron');
@@ -78,7 +95,7 @@ function createWindow() {
       const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar");
       const thumbUp=document.querySelector("#like-button-renderer > paper-icon-button.like.style-scope.ytmusic-like-button-renderer");
       const thumbDown=document.querySelector("#like-button-renderer > paper-icon-button.dislike.style-scope.ytmusic-like-button-renderer");
-      
+      const time=document.querySelector("#left-controls > span");      
     `);
   });
 
