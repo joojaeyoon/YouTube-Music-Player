@@ -178,8 +178,8 @@ function createWindow() {
   });
 
   // mainWindow.webContents.openDevTools({ mode: "detach" });
-  miniPlayer.webContents.openDevTools({ mode: "detach" });
-  view.webContents.openDevTools({ mode: "detach" });
+  // miniPlayer.webContents.openDevTools({ mode: "detach" });
+  // view.webContents.openDevTools({ mode: "detach" });
 }
 
 app.on("ready", function() {
