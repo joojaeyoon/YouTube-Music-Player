@@ -34,6 +34,8 @@ function createWindow() {
   });
 
   mainWindow.on("closed", function() {
+    view = null;
+    miniPlayer = null;
     mainWindow = null;
   });
 
@@ -131,7 +133,7 @@ function createWindow() {
   });
 
   ipcMain.on("quit", function() {
-    mainWindow.close();
+    app.quit();
   });
 
   ipcMain.on("info", function(_, info) {

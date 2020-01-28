@@ -1,4 +1,7 @@
 const { ipcMain, Menu, shell } = require("electron");
+const path = require("path");
+
+console.log(__dirname);
 
 const contextMenu = Menu.buildFromTemplate([
   {
@@ -7,7 +10,7 @@ const contextMenu = Menu.buildFromTemplate([
     click: function() {
       shell.openExternal("https://github.com/wow1548/YouTube-Music-Player");
     },
-    icon: "./assets/GitHub-Mark-16px.png"
+    icon: path.join(__dirname, "../../assets/GitHub-Mark-16px.png")
   },
   {
     label: "Quit",
