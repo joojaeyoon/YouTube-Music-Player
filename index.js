@@ -95,7 +95,8 @@ function createWindow() {
       const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar");
       const thumbUp=document.querySelector("#like-button-renderer > paper-icon-button.like.style-scope.ytmusic-like-button-renderer");
       const thumbDown=document.querySelector("#like-button-renderer > paper-icon-button.dislike.style-scope.ytmusic-like-button-renderer");
-      const time=document.querySelector("#left-controls > span");      
+      const time=document.querySelector("#left-controls > span");
+      const progress=document.querySelector("#progress-bar");      
     `);
   });
 
@@ -178,7 +179,7 @@ function createWindow() {
 
   // mainWindow.webContents.openDevTools({ mode: "detach" });
   miniPlayer.webContents.openDevTools({ mode: "detach" });
-  // view.webContents.openDevTools({ mode: "detach" });
+  view.webContents.openDevTools({ mode: "detach" });
 }
 
 app.on("ready", function() {

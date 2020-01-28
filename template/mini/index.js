@@ -13,6 +13,8 @@ const thumbDown = document.getElementsByClassName("down")[0];
 
 const playImg = document.getElementsByClassName("play")[0];
 
+const bar = document.getElementById("bar");
+
 function changePlayState(isPlay) {
   if (isPlay) {
     playImg.src = playImg.src.replace("pause", "start");
@@ -82,11 +84,13 @@ function maxButton() {
 }
 
 ipc.on("info", function(_, info) {
-  title.textContent = info.song;
+  title.textContent = info.song + " - YouTube Music";
   img.src = info.src;
   song.textContent = info.song;
   author.textContent = info.author;
   time.textContent = info.time;
+  bar.style.width = info.progress + "%";
+
   if (info.like === "true") {
     thumbUp.src = thumbUp.src.replace("outline", "filled");
     thumbUp.classList.add("check");

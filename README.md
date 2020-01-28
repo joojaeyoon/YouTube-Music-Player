@@ -28,11 +28,13 @@
 ### Miniplayer
 
 <img title="MiniPlayer" src='assets/miniplayer.jpg'>
+
 ### ToDo
 
 - [x] Tray icon
 - [x] Background music play
 - [x] mini player
 - [x] add thumb up, down on miniplayer
-- [x] add playing time
+- [x] add playing time on miniplayer
+- [x] add progress bar on miniplayer
 - [ ] add volume slider
