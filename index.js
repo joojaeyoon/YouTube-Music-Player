@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Tray, BrowserView, ipcMain } = require("electron");
 const { contextMenu } = require("./src/Components/TrayMenu");
-const { GetInfo } = require("./src/Components/GetInfo");
+const executes = require("./src/Components/Executes");
 const {
   mainWindowConfig,
   miniPlayerConfig,
@@ -12,7 +12,6 @@ const fs = require("fs");
 let mainWindow, view, miniPlayer;
 let tray = null;
 let currentSong = "";
-let isPlaying = false;
 
 const url = "https://music.youtube.com";
 const titleBarHeight = 30;
@@ -67,47 +66,19 @@ function createWindow() {
   });
 
   miniPlayer.webContents.on("dom-ready", function() {
-    miniPlayer.webContents.executeJavaScript(`
-      let minSize=(Math.min(window.innerWidth,window.innerHeight)*0.6).toString()+"px";
-      
-      img.style.width=minSize;
-      img.style.height=minSize;
-    `);
+    miniPlayer.webContents.executeJavaScript(executes.MiniInit);
   });
 
   miniPlayer.on("resize", function() {
-    miniPlayer.webContents.executeJavaScript(`
-      minSize=(Math.min(window.innerWidth,window.innerHeight)*0.6).toString()+"px";
-      
-      img.style.width=minSize;
-      img.style.height=minSize;
-    `);
+    miniPlayer.webContents.executeJavaScript(executes.MiniResize);
   });
 
   view.webContents.on("dom-ready", function() {
-    view.webContents.executeJavaScript(`    
-      const {ipcRenderer}=require('electron');
-      let sendTitle;
-      const info={};
-      
-      const song=document.querySelector("#layout > ytmusic-player-bar > div.middle-controls.style-scope.ytmusic-player-bar > div.content-info-wrapper.style-scope.ytmusic-player-bar > yt-formatted-string");
-      const previousButton=document.querySelector("#left-controls > div > paper-icon-button.previous-button.style-scope.ytmusic-player-bar");
-      const playButton=document.querySelector("#play-pause-button");
-      const nextButton=document.querySelector("#left-controls > div > paper-icon-button.next-button.style-scope.ytmusic-player-bar");
-      const thumbUp=document.querySelector("#like-button-renderer > paper-icon-button.like.style-scope.ytmusic-like-button-renderer");
-      const thumbDown=document.querySelector("#like-button-renderer > paper-icon-button.dislike.style-scope.ytmusic-like-button-renderer");
-      const time=document.querySelector("#left-controls > span");
-      const progress=document.querySelector("#progress-bar");      
-    `);
+    view.webContents.executeJavaScript(executes.Initialize);
   });
 
   view.webContents.on("media-started-playing", function() {
-    view.webContents.executeJavaScript(`
-        sendTitle=setInterval(()=>{
-          ipcRenderer.send("Title",song.textContent+" - YouTube Music");
-        },1000);
-    `);
-    isPlaying = true;
+    view.webContents.executeJavaScript(executes.SendTitle);
     miniPlayer.send("play", true);
   });
 
@@ -115,16 +86,11 @@ function createWindow() {
     if (view.isDestroyed()) {
       return;
     }
-    view.webContents.executeJavaScript(`
-      clearInterval(sendTitle);
-      ipcRenderer.send("Title","YouTube Music");
-    `);
-    isPlaying = false;
-    miniPlayer.send("play", false);
+    view.webContents.executeJavaScript(executes.ClearInterval);
   });
 
   ipcMain.on("Title", function(_, title) {
-    GetInfo(view.webContents);
+    view.webContents.executeJavaScript(executes.GetInfo);
     if (currentSong !== title) {
       currentSong = title;
       mainWindow.send("titleChanged", title);
@@ -155,33 +121,23 @@ function createWindow() {
   });
 
   ipcMain.on("next", function() {
-    view.webContents.executeJavaScript(`
-      nextButton.click();
-    `);
+    view.webContents.executeJavaScript(executes.Next);
   });
 
   ipcMain.on("previous", function() {
-    view.webContents.executeJavaScript(`
-      previousButton.click();
-    `);
+    view.webContents.executeJavaScript(executes.Previous);
   });
 
   ipcMain.on("play", function() {
-    view.webContents.executeJavaScript(`
-      playButton.click();
-    `);
+    view.webContents.executeJavaScript(executes.Play);
   });
 
   ipcMain.on("thumbup", function() {
-    view.webContents.executeJavaScript(`
-      thumbUp.click();
-    `);
+    view.webContents.executeJavaScript(executes.ThumbUp);
   });
 
   ipcMain.on("thumbdown", function() {
-    view.webContents.executeJavaScript(`
-      thumbDown.click();
-    `);
+    view.webContents.executeJavaScript(executes.ThumbDown);
   });
 
   // mainWindow.webContents.openDevTools({ mode: "detach" });

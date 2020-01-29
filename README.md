@@ -37,4 +37,3 @@
 - [x] add thumb up, down on miniplayer
 - [x] add playing time on miniplayer
 - [x] add progress bar on miniplayer
-- [ ] add volume slider
