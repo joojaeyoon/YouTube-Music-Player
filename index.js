@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Tray, BrowserView, ipcMain } = require("electron");
 const { contextMenu } = require("./src/Components/TrayMenu");
+const { previewTooltip, icons } = require("./src/Components/Preview");
 const executes = require("./src/Components/Executes");
 const {
   mainWindowConfig,
@@ -12,6 +13,7 @@ const fs = require("fs");
 let mainWindow, view, miniPlayer;
 let tray = null;
 let currentSong = "";
+let isplaying = false;
 
 const url = "https://music.youtube.com";
 const titleBarHeight = 30;
@@ -32,6 +34,10 @@ function createWindow() {
     width: mainWindowConfig.width,
     height: mainWindowConfig.height - titleBarHeight
   });
+
+  //Set Preview buttons
+  mainWindow.setThumbarButtons(previewTooltip);
+  miniPlayer.setThumbarButtons(previewTooltip);
 
   mainWindow.on("closed", function() {
     mainWindow = null;
@@ -79,14 +85,22 @@ function createWindow() {
 
   view.webContents.on("media-started-playing", function() {
     view.webContents.executeJavaScript(executes.SendTitle);
+    previewTooltip[2].icon = icons.pause;
+    mainWindow.setThumbarButtons(previewTooltip);
+    miniPlayer.setThumbarButtons(previewTooltip);
     miniPlayer.send("play", true);
+    isplaying = true;
   });
 
   view.webContents.on("media-paused", function() {
     if (view.isDestroyed()) {
       return;
     }
+    previewTooltip[2].icon = icons.play;
+    mainWindow.setThumbarButtons(previewTooltip);
+    miniPlayer.setThumbarButtons(previewTooltip);
     view.webContents.executeJavaScript(executes.ClearInterval);
+    isplaying = false;
   });
 
   ipcMain.on("Title", function(_, title) {
@@ -100,6 +114,7 @@ function createWindow() {
   ipcMain.on("minimode", function() {
     mainWindow.hide();
     miniPlayer.show();
+    miniPlayer.setThumbarButtons(previewTooltip);
   });
 
   ipcMain.on("quit", function() {
@@ -108,6 +123,7 @@ function createWindow() {
   });
 
   ipcMain.on("info", function(_, info) {
+    mainWindow.setThumbnailToolTip(info.song);
     miniPlayer.send("info", info);
   });
 
@@ -118,6 +134,7 @@ function createWindow() {
   ipcMain.on("max", function() {
     mainWindow.show();
     miniPlayer.hide();
+    mainWindow.setThumbarButtons(previewTooltip);
   });
 
   ipcMain.on("next", function() {
@@ -130,10 +147,22 @@ function createWindow() {
 
   ipcMain.on("play", function() {
     view.webContents.executeJavaScript(executes.Play);
+
+    if (isplaying) previewTooltip[2].icon = icons.pause;
+    else previewTooltip[2].icon = icons.play;
+
+    mainWindow.setThumbarButtons(previewTooltip);
+    miniPlayer.setThumbarButtons(previewTooltip);
   });
 
   ipcMain.on("thumbup", function() {
     view.webContents.executeJavaScript(executes.ThumbUp);
+    if (previewTooltip[4].icon === icons.thumbup)
+      previewTooltip[4].icon = icons.thumbup_filled;
+    else previewTooltip[4].icon = icons.thumbup;
+
+    mainWindow.setThumbarButtons(previewTooltip);
+    miniPlayer.setThumbarButtons(previewTooltip);
   });
 
   ipcMain.on("thumbdown", function() {
