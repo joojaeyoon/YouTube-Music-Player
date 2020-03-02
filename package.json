@@ -1,6 +1,6 @@
 {
   "name": "YouTubeMusic",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Youtube-music player for PC",
   "main": "index.js",
   "license": "MIT",
